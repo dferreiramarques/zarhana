@@ -1,0 +1,13 @@
+{
+  "images": [
+    "images/1.jpg",
+    "images/2.jpg",
+    "images/3.jpg",
+    "images/4.jpg"
+  ],
+  "sounds": [
+    "sounds/1.wav",
+    "sounds/2.wav",
+    "sounds/3.wav"
+  ]
+}

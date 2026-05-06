@@ -1,0 +1,409 @@
+<h2 class="sr-only">Zarhana — sistema de background com imagens reais e Ken Burns</h2>
+<link href="https://fonts.googleapis.com/css2?family=Averia+Serif+Libre:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--accent:#8899aa;--border:#ffffff18;--font:'Averia Serif Libre',Georgia,serif}
+body{font-family:var(--font);background:#070709;color:#e0e0ec;overflow-x:hidden;min-height:100vh}
+#bg-canvas{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+.scrim{position:fixed;inset:0;z-index:1;pointer-events:none;
+  background:linear-gradient(to bottom,rgba(7,7,9,.55) 0%,rgba(7,7,9,.35) 40%,rgba(7,7,9,.6) 100%)}
+.site{position:relative;z-index:2;max-width:920px;margin:0 auto;padding:72px 36px 100px}
+.ts{text-shadow:1px 1px 0 rgba(0,0,0,.95),-1px 0 0 rgba(0,0,0,.5)}
+header{margin-bottom:80px;display:flex;justify-content:space-between;align-items:flex-start}
+.header-left h1{font-size:clamp(2.2rem,5vw,3.4rem);font-weight:300;letter-spacing:-0.025em;color:#eeeef8;line-height:1.05;margin-bottom:10px}
+.header-left .sub{font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;color:#505068;font-weight:300}
+.snd-btn{background:none;border:1px solid #ffffff18;color:#505068;font-family:var(--font);font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;padding:9px 16px;cursor:pointer;border-radius:2px;transition:all .5s;flex-shrink:0;margin-top:6px}
+.snd-btn:hover,.snd-btn.on{color:var(--accent);border-color:var(--accent)}
+section{padding-top:52px;border-top:1px solid var(--border)}
+.lbl{font-size:.64rem;letter-spacing:.22em;text-transform:uppercase;color:#404058;margin-bottom:28px;font-weight:400}
+.about-grid{display:grid;grid-template-columns:1fr 240px;gap:48px;align-items:start;padding-bottom:52px}
+.bio-text p{font-size:.98rem;font-weight:300;color:#c8c8d8;line-height:1.95;margin-bottom:1.1em}
+.bio-text p:last-child{margin-bottom:0}
+.trio-photo{width:100%;aspect-ratio:1/1;object-fit:cover;object-position:center top;border-radius:3px;filter:brightness(.85) contrast(1.1);opacity:.9}
+.trio-ph{width:100%;aspect-ratio:1/1;background:#111118;border-radius:3px;border:1px solid var(--border);display:flex;align-items:center;justify-content:center}
+.trio-ph span{font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;color:#2e2e48}
+.members{padding-bottom:52px}
+.mr{display:flex;align-items:baseline;padding:14px 0;border-bottom:1px solid var(--border)}
+.mr:last-child{border-bottom:none}
+.mn{font-size:.86rem;font-weight:400;color:#c0c8d4;width:190px;flex-shrink:0}
+.mo{font-size:.72rem;color:#404058;font-style:italic;width:120px;flex-shrink:0}
+.mro{font-size:.80rem;color:#404058;font-weight:300;font-style:italic}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(252px,1fr));gap:13px;padding-bottom:52px}
+iframe{width:100%;border:none;border-radius:5px;display:block}
+.sp{height:352px}.bc{height:120px}
+.ph{background:#0d0d14;border-radius:5px;display:flex;align-items:center;justify-content:center;border:1px solid var(--border)}
+.ph span{font-size:.64rem;letter-spacing:.12em;text-transform:uppercase;color:#2a2a40}
+.collab-text{padding-bottom:52px;max-width:600px}
+.collab-text>p{font-size:.98rem;font-weight:300;color:#c8c8d8;line-height:1.9;margin-bottom:1.1em}
+.cl{list-style:none;margin:24px 0;padding:0}
+.cl li{font-size:.96rem;font-style:italic;font-weight:300;color:#a0a0c0;padding:13px 0;border-bottom:1px solid var(--border);display:flex;align-items:baseline;gap:14px;line-height:1.6}
+.cl li::before{content:'—';color:#252538;flex-shrink:0;font-style:normal}
+.links-wrap{padding-bottom:52px;display:flex;flex-direction:column;gap:20px}
+.lnk-group{display:flex;flex-direction:column;gap:6px}
+.lnk-label{font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;color:#303048}
+.lnk{font-size:.90rem;color:var(--accent);text-decoration:none;padding-bottom:1px;border-bottom:1px solid transparent;transition:border-color .25s;font-weight:300;display:inline-flex;align-items:center;gap:8px;width:fit-content}
+.lnk:hover{border-color:var(--accent)}
+.img-debug{position:fixed;bottom:12px;right:16px;z-index:10;font-size:.6rem;letter-spacing:.08em;color:#303048;font-family:monospace}
+footer{margin-top:64px;padding-top:24px;border-top:1px solid var(--border);font-size:.64rem;letter-spacing:.14em;color:#1c1c2c;text-transform:uppercase}
+</style>
+
+<canvas id="bg-canvas"></canvas>
+<div class="scrim"></div>
+<div class="img-debug" id="dbg"></div>
+
+<div class="site">
+  <header>
+    <div class="header-left">
+      <h1 class="ts">Zarhana</h1>
+      <p class="sub ts">improvisation &nbsp;·&nbsp; electroacoustic &nbsp;·&nbsp; Porto</p>
+    </div>
+    <button class="snd-btn" id="snd-btn">&#9675; sound</button>
+  </header>
+
+  <section>
+    <p class="lbl">About</p>
+    <div class="about-grid">
+      <div class="bio-text">
+        <p class="ts">Zarhana is a trio that works at the edge of tuning systems and silence.</p>
+        <p class="ts">Ihab Mahna (Egypt/Canada) brings a rhythmic vocabulary drawn from multiple continents. Paulo Ferreira (Portugal) shapes the space between sounds with electronics that listen as much as they speak. David Marques (Portugal) moves between electric guitar, bass and — on occasion — the Portuguese guitar, an instrument he approaches less as a cultural reference and more as a source of microtonal possibility: strange tunings, sustained drones, the friction of semitones held long enough to become something else.</p>
+        <p class="ts">Their practice is improvisational but not formless. Influence is audible — Reich's patience, Eno's instinct for atmosphere, Hassell's willingness to let traditions dissolve into each other — but Zarhana doesn't sound like any of them. It sounds like a conversation that couldn't have happened anywhere else.</p>
+      </div>
+      <div>
+        <img class="trio-photo" src="images/trio.jpg" alt="Zarhana in performance" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="trio-ph" style="display:none"><span>trio.jpg</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <p class="lbl">Members</p>
+    <div class="members">
+      <div class="mr"><span class="mn ts">Ihab Mahna</span><span class="mo">Egypt / Canada</span><span class="mro">percussion</span></div>
+      <div class="mr"><span class="mn ts">David Marques</span><span class="mo">Portugal</span><span class="mro">guitar, Portuguese guitar, bass</span></div>
+      <div class="mr"><span class="mn ts">Paulo Ferreira</span><span class="mo">Portugal</span><span class="mro">synthesizers</span></div>
+    </div>
+  </section>
+
+  <section>
+    <p class="lbl">Music</p>
+    <div class="grid">
+      <div class="ph sp"><span>Spotify embed</span></div>
+      <div class="ph sp"><span>Spotify embed</span></div>
+    </div>
+  </section>
+
+  <section>
+    <p class="lbl">Bandcamp</p>
+    <div class="grid">
+      <div class="ph bc"><span>Bandcamp embed</span></div>
+      <div class="ph bc"><span>Bandcamp embed</span></div>
+    </div>
+  </section>
+
+  <section>
+    <p class="lbl">Collaborate</p>
+    <div class="collab-text">
+      <p class="ts">We are open to hearing what you're working on — finished, half-formed, or just an idea with nowhere to go yet.</p>
+      <ul class="cl">
+        <li>listen to your music and talk about where it could go</li>
+        <li>define something new together, without a genre in mind</li>
+        <li>improvise — in a room, remotely, or somewhere in between</li>
+        <li>produce, arrange, or strip things back</li>
+        <li>build a live set for a specific moment, then dissolve it</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <p class="lbl">Links</p>
+    <div class="links-wrap">
+      <div class="lnk-group">
+        <p class="lnk-label">Instagram</p>
+        <a class="lnk" href="https://www.instagram.com/zarhana.music/" target="_blank" rel="noopener">
+          <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><rect x=".5" y=".5" width="12" height="12" rx="3" stroke="currentColor"/><circle cx="6.5" cy="6.5" r="2.5" stroke="currentColor"/><circle cx="9.5" cy="3.5" r=".8" fill="currentColor"/></svg>
+          @zarhana.music
+        </a>
+      </div>
+      <div class="lnk-group">
+        <p class="lnk-label">Spotify</p>
+        <a class="lnk" href="https://open.spotify.com/artist/5ZEn9ncHWU3gc4SC3wAhcQ" target="_blank" rel="noopener">
+          <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><circle cx="6.5" cy="6.5" r="6" stroke="currentColor"/><path d="M3.5 5c1.8-.6 3.8-.4 5.2.5M3.5 7c1.5-.4 3.2-.3 4.5.4M4 9c1.2-.3 2.5-.2 3.5.3" stroke="currentColor" stroke-linecap="round"/></svg>
+          Zarhana on Spotify
+        </a>
+      </div>
+      <div class="lnk-group">
+        <p class="lnk-label">Bandcamp</p>
+        <a class="lnk" href="https://zarhana.bandcamp.com/" target="_blank" rel="noopener">
+          <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M1 9.5L5 3.5h7L8 9.5H1z" stroke="currentColor"/></svg>
+          zarhana.bandcamp.com
+        </a>
+      </div>
+      <div class="lnk-group">
+        <p class="lnk-label">Press &amp; booking</p>
+        <a class="lnk" href="bio/zarhana_bio.pdf" target="_blank">
+          <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><rect x=".5" y=".5" width="12" height="12" rx="1.5" stroke="currentColor" stroke-opacity=".5"/><path d="M4 6.5h5M6.5 4v5" stroke="currentColor" stroke-opacity=".7"/></svg>
+          Bio &amp; press kit (PDF)
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="ts">Zarhana &mdash; Porto, Portugal</footer>
+</div>
+
+<script>
+(function(){
+const canvas=document.getElementById('bg-canvas');
+const ctx=canvas.getContext('2d');
+const dbg=document.getElementById('dbg');
+
+function resize(){
+  canvas.width=window.innerWidth||700;
+  canvas.height=window.innerHeight||800;
+}
+resize();
+window.addEventListener('resize',resize);
+
+// ── Image system ──────────────────────────────────────────
+// Reads manifest.json → picks random images → Ken Burns cross-fade
+const MANIFEST_URL='images/manifest.json';
+const FALLBACK_PATHS=['images/ref_01.jpg','images/ref_02.jpg','images/ref_03.jpg',
+  'images/ref_04.jpg','images/ref_05.jpg'];
+
+let imgList=[];
+let slots=[null,null]; // two image slots for cross-fade
+let slotAlpha=[0,0];
+let activeSlot=0;
+let kbState=[
+  {x:0,y:0,scale:1,vx:.015,vy:.01,vs:.0003},
+  {x:0,y:0,scale:1,vx:-.012,vy:.008,vs:.0002}
+];
+let crossFading=false;
+let crossT=0;
+const CROSS_DUR=180; // frames ~3s at 60fps
+const HOLD_FRAMES=900; // ~15s before next image
+
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+
+function loadImg(src){
+  return new Promise(res=>{
+    const img=new Image();
+    img.crossOrigin='anonymous';
+    img.onload=()=>res(img);
+    img.onerror=()=>res(null);
+    img.src=src;
+  });
+}
+
+async function initImages(){
+  let paths=[];
+  try{
+    const r=await fetch(MANIFEST_URL);
+    if(r.ok){const m=await r.json();paths=m.images||m||[];}
+  }catch(e){paths=FALLBACK_PATHS;}
+
+  const loaded=[];
+  for(const p of paths){
+    const img=await loadImg(p);
+    if(img){loaded.push(img);dbg.textContent='img: '+loaded.length;}
+  }
+
+  if(!loaded.length){dbg.textContent='no images — generative only';return;}
+  imgList=shuffle(loaded);
+
+  // load first two slots
+  slots[0]=imgList[0];
+  slots[1]=imgList[1%imgList.length];
+  slotAlpha[0]=1;slotAlpha[1]=0;
+  resetKB(0);resetKB(1);
+  dbg.textContent='';
+}
+
+function resetKB(i){
+  const dirs=[1,-1];
+  kbState[i]={
+    x:(Math.random()-.5)*30,
+    y:(Math.random()-.5)*20,
+    scale:1.0+Math.random()*.08,
+    vx:dirs[Math.floor(Math.random()*2)]*(.008+Math.random()*.008),
+    vy:dirs[Math.floor(Math.random()*2)]*(.005+Math.random()*.005),
+    vs:.00015+Math.random()*.0001
+  };
+}
+
+let holdCount=0;
+let imgIdx=0;
+
+function drawImages(){
+  if(!imgList.length)return;
+
+  // Ken Burns movement
+  kbState.forEach(k=>{
+    k.x+=k.vx;k.y+=k.vy;k.scale+=k.vs;
+    if(Math.abs(k.x)>40)k.vx*=-1;
+    if(Math.abs(k.y)>30)k.vy*=-1;
+    if(k.scale>1.12||k.scale<1.0)k.vs*=-1;
+  });
+
+  // Hold then cross-fade
+  holdCount++;
+  if(holdCount>HOLD_FRAMES&&!crossFading){
+    crossFading=true;crossT=0;
+    imgIdx=(imgIdx+1)%imgList.length;
+    const next=(activeSlot+1)%2;
+    slots[next]=imgList[imgIdx];
+    resetKB(next);
+  }
+
+  if(crossFading){
+    crossT++;
+    const p=Math.min(crossT/CROSS_DUR,1);
+    const ease=p<.5?2*p*p:1-Math.pow(-2*p+2,2)/2;
+    slotAlpha[activeSlot]=1-ease;
+    slotAlpha[(activeSlot+1)%2]=ease;
+    if(crossT>=CROSS_DUR){
+      crossFading=false;holdCount=0;
+      activeSlot=(activeSlot+1)%2;
+      slotAlpha[activeSlot]=1;
+      slotAlpha[(activeSlot+1)%2]=0;
+    }
+  }
+
+  // Draw two slots
+  const W=canvas.width,H=canvas.height;
+  [0,1].forEach(i=>{
+    if(!slots[i]||slotAlpha[i]<.01)return;
+    const k=kbState[i];
+    const img=slots[i];
+    const ir=img.width/img.height;
+    const cr=W/H;
+    let dw,dh;
+    if(ir>cr){dh=H*k.scale;dw=dh*ir;}
+    else{dw=W*k.scale;dh=dw/ir;}
+    const dx=(W-dw)/2+k.x;
+    const dy=(H-dh)/2+k.y;
+    ctx.globalAlpha=slotAlpha[i]*0.55;
+    ctx.globalCompositeOperation='luminosity';
+    ctx.drawImage(img,dx,dy,dw,dh);
+  });
+  ctx.globalAlpha=1;
+}
+
+// ── Colour blob layer ─────────────────────────────────────
+const layers=[];
+function mkL(){
+  const hues=[[210,12],[195,9],[225,15],[240,10],[180,8]];
+  const[h,s]=hues[Math.floor(Math.random()*hues.length)];
+  return{x:Math.random()*canvas.width,y:Math.random()*canvas.height,
+    r:180+Math.random()*260,vx:(Math.random()-.5)*.12,vy:(Math.random()-.5)*.09,
+    h,s,a:.018+Math.random()*.025,scale:.8+Math.random()*.5,vs:(Math.random()-.5)*.00015}
+}
+for(let i=0;i<5;i++)layers.push(mkL());
+
+let frame=0;
+function draw(){
+  frame++;
+  // Dark base fade
+  ctx.globalCompositeOperation='source-over';
+  ctx.globalAlpha=1;
+  ctx.fillStyle='rgba(7,7,9,0.07)';
+  ctx.fillRect(0,0,canvas.width,canvas.height);
+
+  // Images
+  drawImages();
+
+  // Colour blobs on top
+  ctx.globalCompositeOperation='screen';
+  layers.forEach(l=>{
+    l.x+=l.vx;l.y+=l.vy;l.scale+=l.vs;
+    if(l.x<-l.r||l.x>canvas.width+l.r)l.vx*=-1;
+    if(l.y<-l.r||l.y>canvas.height+l.r)l.vy*=-1;
+    if(l.scale<.5||l.scale>1.4)l.vs*=-1;
+    const r=l.r*l.scale;
+    const g=ctx.createRadialGradient(l.x,l.y,0,l.x,l.y,r);
+    g.addColorStop(0,`hsla(${l.h},${l.s}%,22%,${l.a})`);
+    g.addColorStop(.6,`hsla(${l.h},${l.s}%,10%,${l.a*.3})`);
+    g.addColorStop(1,'hsla(0,0%,0%,0)');
+    ctx.globalAlpha=1;
+    ctx.fillStyle=g;ctx.fillRect(0,0,canvas.width,canvas.height);
+  });
+  if(frame%500===0)Object.assign(layers[Math.floor(Math.random()*layers.length)],mkL());
+
+  ctx.globalCompositeOperation='source-over';
+  ctx.globalAlpha=1;
+  requestAnimationFrame(draw);
+}
+
+initImages().then(()=>draw());
+
+// ── Audio ─────────────────────────────────────────────────
+let ac=null,mg=null,playing=false,oscNodes=[],baseFreqs=[],pitchState='neutral';
+const btn=document.getElementById('snd-btn');
+
+function mkRev(ac){
+  const c=ac.createConvolver();
+  const b=ac.createBuffer(2,ac.sampleRate*3,ac.sampleRate);
+  for(let i=0;i<2;i++){const d=b.getChannelData(i);for(let j=0;j<d.length;j++)d[j]=(Math.random()*2-1)*Math.pow(1-j/d.length,1.8)}
+  c.buffer=b;return c;
+}
+
+function setPitch(mult){
+  if(!ac||!oscNodes.length)return;
+  const t=ac.currentTime;
+  oscNodes.forEach((o,i)=>{o.frequency.cancelScheduledValues(t);o.frequency.linearRampToValueAtTime(baseFreqs[i]*mult,t+4)});
+}
+
+function startAudio(){
+  ac=new(window.AudioContext||window.webkitAudioContext)();
+  mg=ac.createGain();mg.gain.value=0;
+  const rev=mkRev(ac),rg=ac.createGain(),dr=ac.createGain();
+  rg.gain.value=.42;dr.gain.value=.6;
+  mg.connect(rev);rev.connect(rg);rg.connect(ac.destination);
+  mg.connect(dr);dr.connect(ac.destination);
+  const base=[55,73.4,82.4,61.7][Math.floor(Math.random()*4)];
+  oscNodes=[];baseFreqs=[];
+  [[base,.26,'sine'],[base*1.5,.16,'sine'],[base*2,.10,'triangle'],[base*.5,.08,'sine']].forEach(([f,gv,t])=>{
+    const o=ac.createOscillator(),g=ac.createGain(),fl=ac.createBiquadFilter();
+    o.type=t;o.frequency.value=f;fl.type='lowpass';fl.frequency.value=f*8;fl.Q.value=1.5;
+    g.gain.value=gv;o.connect(fl);fl.connect(g);g.connect(mg);o.start();
+    oscNodes.push(o);baseFreqs.push(f);
+  });
+  const nb=ac.createBuffer(1,ac.sampleRate*4,ac.sampleRate);
+  const nd=nb.getChannelData(0);for(let i=0;i<nd.length;i++)nd[i]=Math.random()*2-1;
+  const ns=ac.createBufferSource();ns.buffer=nb;ns.loop=true;
+  const nf=ac.createBiquadFilter();nf.type='bandpass';nf.frequency.value=base*4;nf.Q.value=14;
+  const ng=ac.createGain();ng.gain.value=.025;
+  ns.connect(nf);nf.connect(ng);ng.connect(mg);ns.start();
+  mg.gain.setValueAtTime(0,ac.currentTime);
+  mg.gain.linearRampToValueAtTime(.35,ac.currentTime+6);
+  pitchState='neutral';
+  function drift(){
+    if(!ac||ac.state==='closed')return;
+    oscNodes.forEach(o=>{const c=o.detune.value+(Math.random()-.5)*35;o.detune.linearRampToValueAtTime(Math.max(-70,Math.min(70,c)),ac.currentTime+30+Math.random()*20)});
+    setTimeout(drift,28000+Math.random()*18000);
+  }
+  setTimeout(drift,10000);
+}
+
+function stopAudio(){
+  if(!ac)return;
+  mg.gain.linearRampToValueAtTime(0,ac.currentTime+3);
+  setTimeout(()=>{try{ac.close()}catch(e){}ac=null;oscNodes=[];baseFreqs=[];},3500);
+}
+
+btn.addEventListener('click',()=>{
+  if(!playing){startAudio();btn.textContent='◉ sound';btn.classList.add('on')}
+  else{stopAudio();btn.textContent='○ sound';btn.classList.remove('on')}
+  playing=!playing;
+});
+
+let lastScrollY=window.scrollY;
+window.addEventListener('scroll',()=>{
+  if(!playing||!ac)return;
+  const cur=window.scrollY,dir=cur>lastScrollY?'down':'up';
+  lastScrollY=cur;
+  if(dir==='down'&&pitchState!=='down'){pitchState='down';setPitch(.9);}
+  else if(dir==='up'&&pitchState!=='up'){pitchState='up';setPitch(1.1);}
+},{passive:true});
+})();
+</script>
