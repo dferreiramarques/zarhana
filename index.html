@@ -3,64 +3,68 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Zarhana</title>
+<title>Zarhana — improvisation · electroacoustic · Porto</title>
+<meta name="description" content="Zarhana is a Porto-based trio working with improvisation, electroacoustic textures and microtonal tunings. Listen on Spotify and Bandcamp.">
+<meta name="theme-color" content="#070709">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='8' cy='8' r='5.5' fill='none' stroke='%238899aa'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Averia+Serif+Libre:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Commissioner:wght@100..900&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{--accent:#8899aa;--border:#ffffff18;--font:'Averia Serif Libre',Georgia,serif}
+:root{--accent:#8899aa;--border:#ffffff18;--font:'Commissioner',system-ui,Arial,sans-serif}
 html{font-size:17px}
 body{font-family:var(--font);background:#070709;color:#e0e0ec;overflow-x:hidden;min-height:100vh}
 #bg-canvas{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
 .scrim{position:fixed;inset:0;z-index:1;pointer-events:none;background:linear-gradient(to bottom,rgba(7,7,9,.58) 0%,rgba(7,7,9,.38) 40%,rgba(7,7,9,.65) 100%)}
-.site{position:relative;z-index:2;max-width:920px;margin:0 auto;padding:72px 36px 100px}
-.ts{text-shadow:2px 2px 0 rgba(0,0,0,.95),-1px 0 0 rgba(0,0,0,.5)}
-header{margin-bottom:80px;display:flex;justify-content:space-between;align-items:flex-start;gap:24px}
-header h1{font-size:clamp(2.2rem,5vw,3.4rem);font-weight:300;letter-spacing:-0.025em;color:#eeeef8;line-height:1.05;margin-bottom:10px}
+.site{position:relative;z-index:2;max-width:840px;margin:0 auto;padding:112px 48px 120px;background:rgba(7,7,9,.55);border-left:1px solid var(--border);border-right:1px solid var(--border)}
+header{margin-bottom:120px;display:flex;flex-direction:column;align-items:flex-start;gap:28px}
+header h1{font-size:clamp(2.2rem,5vw,3.4rem);font-weight:700;letter-spacing:-0.025em;color:#eeeef8;line-height:1.05;margin-bottom:10px;text-transform:uppercase}
 header .sub{font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;color:#b4b4ce;font-weight:300}
-.audio-ctrl{display:flex;flex-direction:column;align-items:flex-end;gap:8px;flex-shrink:0;margin-top:6px}
+.audio-ctrl{display:flex;align-items:center;gap:14px;flex-shrink:0}
 .snd-btn{background:none;border:1px solid #ffffff18;color:#505068;font-family:var(--font);font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;padding:9px 16px;cursor:pointer;border-radius:2px;transition:all .5s}
 .snd-btn:hover,.snd-btn.on{color:var(--accent);border-color:var(--accent)}
-.snd-status{font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:#2a2a38;font-style:italic;text-align:right;min-height:1em;transition:color .6s}
+.snd-status{font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:#2a2a38;font-style:italic;text-align:left;min-height:1em;transition:color .6s}
 .snd-status.active{color:#404058}
 .snd-status.ok{color:#506050}
 .snd-status.err{color:#604040}
-section{padding-top:52px;border-top:1px solid var(--border);margin-bottom:0}
-.lbl{font-size:.64rem;letter-spacing:.22em;text-transform:uppercase;color:#b4b4ce;margin-bottom:28px;font-weight:400}
-.about-grid{display:grid;grid-template-columns:1fr 400px;gap:48px;align-items:start;padding-bottom:52px}
-.bio-text p{font-size:.98rem;font-weight:300;color:#c8c8d8;line-height:1.95;margin-bottom:1.1em}
+section{padding-top:88px;border-top:1px solid var(--border);margin-bottom:0}
+.lbl{font-size:.64rem;letter-spacing:.22em;text-transform:uppercase;color:#b4b4ce;margin-bottom:44px;font-weight:400}
+.about-grid{display:grid;grid-template-columns:1fr 340px;gap:64px;align-items:start}
+.bio-text p{font-size:.98rem;font-weight:300;color:#c8c8d8;line-height:2.05;margin-bottom:1.35em}
 .bio-text p:last-child{margin-bottom:0}
-.trio-photo{width:100%;aspect-ratio:1/1;object-fit:cover;object-position:center top;border-radius:3px;filter:brightness(.85) contrast(1.1);opacity:.9}
-.trio-ph{width:100%;aspect-ratio:1/1;background:#111118;border-radius:3px;border:1px solid var(--border);display:flex;align-items:center;justify-content:center}
-.trio-ph span{font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;color:#2e2e48}
-.members{padding-bottom:52px}
+.trio-photo{width:100%;aspect-ratio:1/1;object-fit:cover;object-position:center top;border-radius:3px;opacity:.85}
+.members{margin:0}
 .mr{display:flex;align-items:baseline;padding:14px 0;border-bottom:1px solid var(--border)}
 .mr:last-child{border-bottom:none}
 .mn{font-size:.86rem;font-weight:400;color:#c0c8d4;width:190px;flex-shrink:0}
 .mo{font-size:.72rem;color:#b5b5d3;font-style:italic;width:120px;flex-shrink:0}
 .mro{font-size:.80rem;color:#b5b5d3;font-weight:300;font-style:italic}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:13px;padding-bottom:13px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:22px}
 iframe{width:100%;border:none;border-radius:5px;display:block}
-.sp{height:352px}.bc{height:120px}
-.collab-text{padding-bottom:52px;max-width:600px}
-.collab-text>p{font-size:.98rem;font-weight:300;color:#c8c8d8;line-height:1.9;margin-bottom:1.1em}
+.collab-text{max-width:600px}
+.collab-text>p{font-size:.98rem;font-weight:300;color:#c8c8d8;line-height:2.05;margin-bottom:1.35em}
 .cl{list-style:none;margin:24px 0;padding:0}
-.cl li{font-size:.96rem;font-style:italic;font-weight:300;color:#a0a0c0;padding:13px 0;border-bottom:1px solid var(--border);display:flex;align-items:baseline;gap:14px;line-height:1.6}
+.cl li{font-size:.96rem;font-style:italic;font-weight:300;color:#a0a0c0;padding:18px 0;border-bottom:1px solid var(--border);display:flex;align-items:baseline;gap:14px;line-height:1.6}
 .cl li::before{content:'—';color:#252538;flex-shrink:0;font-style:normal}
-.links-wrap{padding-bottom:52px;display:flex;flex-direction:column;gap:20px}
-.lnk-group{display:flex;flex-direction:column;gap:6px}
-.lnk-label{font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;color:#303048}
+.links-wrap{display:flex;flex-direction:column;gap:32px}
+.lnk-group{display:flex;flex-direction:column;gap:10px}
+.lnk-label{font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;color:#9a9ac0}
 .lnk{font-size:.90rem;color:var(--accent);text-decoration:none;padding-bottom:1px;border-bottom:1px solid transparent;transition:border-color .25s;font-weight:300;display:inline-flex;align-items:center;gap:8px;width:fit-content}
 .lnk:hover{border-color:var(--accent)}
 .lnk svg{flex-shrink:0;opacity:.6}
-footer{margin-top:64px;padding-top:24px;border-top:1px solid var(--border);font-size:.64rem;letter-spacing:.14em;color:#1c1c2c;text-transform:uppercase}
+footer{margin-top:96px;padding-top:24px;border-top:1px solid var(--border);font-size:.64rem;letter-spacing:.14em;color:#1c1c2c;text-transform:uppercase}
+:focus-visible{outline:1px solid var(--accent);outline-offset:3px;border-radius:2px}
+@media (prefers-reduced-motion:reduce){
+  #bg-canvas{display:none}
+}
 @media(max-width:640px){
-  .about-grid{grid-template-columns:1fr;gap:28px}
-  .trio-photo,.trio-ph{width:180px}
-  .site{padding:48px 20px 80px}
-  header{flex-direction:column;gap:16px;margin-bottom:56px}
-  .audio-ctrl{align-items:flex-start}
+  .about-grid{grid-template-columns:1fr;gap:32px}
+  .trio-photo{width:180px}
+  .site{padding:72px 22px 80px}
+  header{margin-bottom:72px}
+  section{padding-top:64px}
+  .lbl{margin-bottom:32px}
   .mn{width:140px}.mo{width:90px}
   .grid{grid-template-columns:1fr}
 }
@@ -72,60 +76,59 @@ footer{margin-top:64px;padding-top:24px;border-top:1px solid var(--border);font-
 <div class="site">
   <header>
     <div>
-      <h1 class="ts">Zarhana</h1>
-      <p class="sub ts">improvisation &nbsp;·&nbsp; electroacoustic &nbsp;·&nbsp; Porto</p>
+      <h1>Zarhana</h1>
+      <p class="sub">improvisation &nbsp;·&nbsp; electroacoustic &nbsp;·&nbsp; Porto</p>
     </div>
     <div class="audio-ctrl">
-      <button class="snd-btn" id="snd-btn">&#9675; sound</button>
-      <span class="snd-status" id="snd-status"></span>
+      <button class="snd-btn" id="snd-btn" aria-pressed="false" aria-controls="snd-status">&#9675; texture</button>
+      <span class="snd-status" id="snd-status" role="status"></span>
     </div>
   </header>
 
   <section>
-    <p class="lbl">About</p>
+    <h2 class="lbl">About</h2>
     <div class="about-grid">
       <div class="bio-text">
-        <p class="ts">Zarhana is a trio that works at the edge of tuning systems and silence.</p>
-        <p class="ts">Ihab Mahna (Egypt/Canada) brings a rhythmic vocabulary drawn from multiple continents. Paulo Ferreira (Portugal) shapes the space between sounds with electronics that listen as much as they speak. David Marques (Portugal) moves between electric guitar, bass and — on occasion — the Portuguese guitar, an instrument he approaches less as a cultural reference and more as a source of microtonal possibility: strange tunings, sustained drones, the friction of semitones held long enough to become something else.</p>
-        <p class="ts">Their practice is improvisational but not formless. Influence is audible — Reich's patience, Eno's instinct for atmosphere, Hassell's willingness to let traditions dissolve into each other — but Zarhana doesn't sound like any of them. It sounds like a conversation that couldn't have happened anywhere else.</p>
+        <p>Zarhana is a trio that works at the edge of tuning systems and silence.</p>
+        <p>Ihab Mahna (Egypt/Canada) brings a rhythmic vocabulary drawn from multiple continents. Paulo Ferreira (Portugal) shapes the space between sounds with electronics that listen as much as they speak. David Marques (Portugal) moves between electric guitar, bass and — on occasion — the Portuguese guitar, an instrument he approaches less as a cultural reference and more as a source of microtonal possibility: strange tunings, sustained drones, the friction of semitones held long enough to become something else.</p>
+        <p>Their practice is improvisational but not formless. Influence is audible — Reich's patience, Eno's instinct for atmosphere, Hassell's willingness to let traditions dissolve into each other — but Zarhana doesn't sound like any of them. It sounds like a conversation that couldn't have happened anywhere else.</p>
       </div>
       <div>
-        <img class="trio-photo" src="images/trio.jpg" alt="Zarhana in performance" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="trio-ph" style="display:none"><span>trio.jpg</span></div>
+        <img class="trio-photo" src="images/trio.jpg" alt="Zarhana in performance" decoding="async">
       </div>
     </div>
   </section>
 
   <section>
-    <p class="lbl">Members</p>
+    <h2 class="lbl">Members</h2>
     <div class="members">
-      <div class="mr"><span class="mn ts">Ihab Mahna</span><span class="mo">Egypt / Canada</span><span class="mro">percussion</span></div>
-      <div class="mr"><span class="mn ts">David Marques</span><span class="mo">Portugal</span><span class="mro">guitar, Portuguese guitar, bass</span></div>
-      <div class="mr"><span class="mn ts">Paulo Ferreira</span><span class="mo">Portugal</span><span class="mro">synthesizers</span></div>
+      <div class="mr"><span class="mn">Ihab Mahna</span><span class="mo">Egypt / Canada</span><span class="mro">percussion</span></div>
+      <div class="mr"><span class="mn">David Marques</span><span class="mo">Portugal</span><span class="mro">guitar, Portuguese guitar, bass</span></div>
+      <div class="mr"><span class="mn">Paulo Ferreira</span><span class="mo">Portugal</span><span class="mro">synthesizers</span></div>
     </div>
   </section>
 
   <section>
-    <p class="lbl">Music</p>
+    <h2 class="lbl">Music</h2>
     <div class="grid">
-      <iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/album/6Twf9uQiOyCZhlbVms8WLf?utm_source=generator" width="100%" height="400" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+      <iframe src="https://open.spotify.com/embed/album/6Twf9uQiOyCZhlbVms8WLf?utm_source=generator" width="100%" height="400" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy" title="Spotify player — Zarhana album"></iframe>
     </div>
   </section>
 
   <section>
-    <p class="lbl">Bandcamp</p>
+    <h2 class="lbl">Bandcamp</h2>
     <div class="grid">
-      <iframe style="border: 0; width: 250px; height: 400px;" src="https://bandcamp.com/EmbeddedPlayer/album=981017379/size=large/bgcol=333333/linkcol=ffffff/tracklist=false/transparent=true/" seamless><a href="https://zarhana.bandcamp.com/album/zarhana-live-trama">Zarhana Live - Trama by Zarhana</a></iframe>
-      <iframe style="border: 0; width: 250px; height: 400px;" src="https://bandcamp.com/EmbeddedPlayer/track=281773370/size=large/bgcol=333333/linkcol=ffffff/tracklist=false/transparent=true/" seamless><a href="https://zarhana.bandcamp.com/track/the-cow-and-the-moon">The Cow and the Moon by Zarhana</a></iframe>
-      <iframe style="border: 0; width: 250px; height: 400px;" src="https://bandcamp.com/EmbeddedPlayer/track=3549527913/size=large/bgcol=333333/linkcol=ffffff/tracklist=false/transparent=true/" seamless><a href="https://zarhana.bandcamp.com/track/live-improv-feb2025">Live Improv - Feb2025 by Zarhana</a></iframe>
+      <iframe src="https://bandcamp.com/EmbeddedPlayer/album=981017379/size=large/bgcol=333333/linkcol=ffffff/tracklist=false/transparent=true/" width="100%" height="400" loading="lazy" title="Bandcamp player — Zarhana Live: Trama" seamless><a href="https://zarhana.bandcamp.com/album/zarhana-live-trama">Zarhana Live - Trama by Zarhana</a></iframe>
+      <iframe src="https://bandcamp.com/EmbeddedPlayer/track=281773370/size=large/bgcol=333333/linkcol=ffffff/tracklist=false/transparent=true/" width="100%" height="400" loading="lazy" title="Bandcamp player — The Cow and the Moon" seamless><a href="https://zarhana.bandcamp.com/track/the-cow-and-the-moon">The Cow and the Moon by Zarhana</a></iframe>
+      <iframe src="https://bandcamp.com/EmbeddedPlayer/track=3549527913/size=large/bgcol=333333/linkcol=ffffff/tracklist=false/transparent=true/" width="100%" height="400" loading="lazy" title="Bandcamp player — Live Improv Feb2025" seamless><a href="https://zarhana.bandcamp.com/track/live-improv-feb2025">Live Improv - Feb2025 by Zarhana</a></iframe>
 
     </div>
   </section>
 
   <section>
-    <p class="lbl">Collaborate</p>
+    <h2 class="lbl">Collaborate</h2>
     <div class="collab-text">
-      <p class="ts">We are open to hearing what you're working on — finished, half-formed, or just an idea with nowhere to go yet.</p>
+      <p>We are open to hearing what you're working on — finished, half-formed, or just an idea with nowhere to go yet.</p>
       <ul class="cl">
         <li>listen to your music and talk about where it could go</li>
         <li>define something new together, without a genre in mind</li>
@@ -137,7 +140,7 @@ footer{margin-top:64px;padding-top:24px;border-top:1px solid var(--border);font-
   </section>
 
   <section>
-    <p class="lbl">Links</p>
+    <h2 class="lbl">Links</h2>
     <div class="links-wrap">
       <div class="lnk-group">
         <p class="lnk-label">Instagram</p>
@@ -162,7 +165,7 @@ footer{margin-top:64px;padding-top:24px;border-top:1px solid var(--border);font-
       </div>
       <div class="lnk-group">
         <p class="lnk-label">Press &amp; booking</p>
-        <a class="lnk" href="bio/zarhana_bio.pdf" target="_blank">
+        <a class="lnk" href="bio/zarhana_bio.pdf" target="_blank" rel="noopener">
           <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><rect x=".5" y=".5" width="12" height="12" rx="1.5" stroke="currentColor" stroke-opacity=".5"/><path d="M4 6.5h5M6.5 4v5" stroke="currentColor" stroke-opacity=".7"/></svg>
           Bio &amp; press kit (PDF)
         </a>
@@ -179,7 +182,7 @@ footer{margin-top:64px;padding-top:24px;border-top:1px solid var(--border);font-
 // ── MANIFEST ───────────────────────────────────────────────────────────
 const MANIFEST = {
   images: ["images/1.jpg","images/2.jpg","images/3.jpg","images/4.jpg"],
-  sounds: ["sounds/1.wav","sounds/2.wav","sounds/3.wav"]
+  sounds: ["sounds/1.wav","sounds/2.wav"]
 };
 
 // ── Helpers ────────────────────────────────────────────────────────────
@@ -194,43 +197,61 @@ function setStatus(msg, cls){
   statusEl.className = 'snd-status' + (cls ? ' '+cls : '');
 }
 
+// Bandcamp players: artwork is square, so height must track the rendered width
+function fitEmbeds(){
+  document.querySelectorAll('iframe[src*="bandcamp.com/EmbeddedPlayer"]').forEach(f=>{
+    f.style.height=Math.round(f.clientWidth+120)+'px';
+  });
+}
+fitEmbeds();
+window.addEventListener('resize',fitEmbeds);
+window.addEventListener('load',fitEmbeds);
+
+// Respect user's reduced-motion preference (canvas is hidden via CSS)
+const REDUCED_MOTION=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
 // ── Canvas ─────────────────────────────────────────────────────────────
 const canvas=document.getElementById('bg-canvas');
 const ctx=canvas.getContext('2d');
-function resize(){canvas.width=window.innerWidth;canvas.height=window.innerHeight;}
+function resize(){
+  canvas.width=window.innerWidth;
+  canvas.height=window.innerHeight;
+}
 resize();
 window.addEventListener('resize',resize);
 
-let fragments=[],loadedImgs=[];
+// Scroll flare for the point field: dots brighten while scrolling, then settle
+let dotTarget=0,dotLift=0;
+
+let fragments=[],loadedImgs=[],particlePool=[];
+function bakeBlur(img){
+  const c=document.createElement('canvas');
+  c.width=Math.max(2,img.width>>1);c.height=Math.max(2,img.height>>1);
+  const x=c.getContext('2d');
+  x.filter='blur(5px)';x.drawImage(img,0,0,c.width,c.height);
+  return c;
+}
 
 function mkCloud(img){
-  const sw=rnd(img.width*.25,img.width*.65),sh=rnd(img.height*.25,img.height*.65);
-  return{type:'cloud',img,sx:rnd(0,img.width-sw),sy:rnd(0,img.height-sh),sw,sh,
+  // Baked-blur sprite: one calm elongated drift per image
+  const sw=rnd(img.width*.35,img.width*.8),sh=rnd(img.height*.35,img.height*.8);
+  return{img,sx:rnd(0,img.width-sw),sy:rnd(0,img.height-sh),sw,sh,
     dx:rnd(-80,canvas.width+80),dy:rnd(-80,canvas.height+80),
-    dw:rnd(280,520),dh:rnd(220,440),vx:rnd(-0.055,0.055),vy:rnd(-0.04,0.04),
-    blur:rnd(8,32),alpha:rnd(0.24,0.44),life:0,maxLife:rnd(1700,3400)};
-}
-function mkGlitch(img){
-  const sw=rnd(25,90),sh=rnd(18,70);
-  return{type:'glitch',img,sx:rnd(0,img.width-sw),sy:rnd(0,img.height-sh),sw,sh,
-    dx:rnd(0,canvas.width),dy:rnd(0,canvas.height),dw:rnd(22,85),dh:rnd(16,65),
-    vx:rnd(-0.045,0.045),vy:rnd(-0.035,0.035),blur:rnd(0,1.2),alpha:rnd(0.38,0.78),
-    glitchOffset:0,glitchCD:Math.floor(rnd(60,220)),life:0,maxLife:rnd(1280,2650)};
+    dw:rnd(420,880),dh:rnd(340,700),vx:rnd(-0.03,0.03),vy:rnd(-0.02,0.02),
+    alpha:rnd(0.16,0.3),life:0,maxLife:rnd(1700,3400)};
 }
 function buildFragments(imgs){
   fragments=[];
-  imgs.forEach(img=>{
-    for(let i=0;i<3;i++)fragments.push(mkCloud(img));
-    for(let i=0;i<2;i++)fragments.push(mkGlitch(img));
-  });
+  imgs.forEach(img=>fragments.push(mkCloud(img)));
 }
 async function initImages(){
-  const loaded=[];
-  for(const p of shuffle(MANIFEST.images)){const img=await loadImg(p);if(img)loaded.push(img);}
+  const loaded=(await Promise.all(shuffle(MANIFEST.images).map(loadImg))).filter(Boolean);
   if(!loaded.length)return;
-  loadedImgs=loaded;buildFragments(loaded);
+  loadedImgs=loaded;
+  buildFragments(loaded.map(bakeBlur));   // baked soft sprites for the fragment layer
+  buildParticles(loaded);                 // point cloud sampled from the raw images
 }
-function drawFrag(f){
+function drawFrag(f,dc){
   const{img,sx,sy,sw,sh,dx,dy,dw,dh}=f;
   f.dx+=f.vx;f.dy+=f.vy;
   if(f.dx>canvas.width+dw)f.dx=-dw;
@@ -240,66 +261,66 @@ function drawFrag(f){
   f.life++;
   const lf=f.life/f.maxLife;
   const fade=lf<0.1?lf/0.1:lf>0.85?1-(lf-0.85)/0.15:1;
-  if(f.type==='cloud'){
-    ctx.save();ctx.filter=`blur(${f.blur}px)`;
-    ctx.globalCompositeOperation='luminosity';ctx.globalAlpha=f.alpha*fade;
-    ctx.drawImage(img,sx,sy,sw,sh,dx,dy,dw,dh);ctx.restore();
-  }else{
-    f.glitchCD--;
-    if(f.glitchCD<=0){f.glitchOffset=rnd(-16,16);f.glitchCD=Math.floor(rnd(80,260));setTimeout(()=>{f.glitchOffset=0;},rnd(40,150));}
-    ctx.save();
-    if(f.blur>0)ctx.filter=`blur(${f.blur}px)`;
-    ctx.globalCompositeOperation='screen';ctx.globalAlpha=f.alpha*fade*1.72;
-    ctx.drawImage(img,sx,sy,sw,sh,dx,dy,dw,dh);
-    if(Math.abs(f.glitchOffset)>2){
-      ctx.globalAlpha=f.alpha*fade*0.25;
-      ctx.drawImage(img,sx,sy,sw,sh,dx+f.glitchOffset*1.4,dy,dw,dh);
-      ctx.drawImage(img,sx,sy,sw,sh,dx-f.glitchOffset*0.8,dy+rnd(-2,2),dw,dh);
-    }
-    ctx.restore();
-  }
+  dc.globalAlpha=f.alpha*fade;
+  dc.drawImage(img,sx,sy,sw,sh,dx,dy,dw,dh);
+  dc.globalAlpha=1;
   if(f.life>=f.maxLife){
     const ni=loadedImgs[Math.floor(Math.random()*loadedImgs.length)];
-    Object.assign(f,Math.random()<0.45?mkGlitch(ni):mkCloud(ni));
+    Object.assign(f,mkCloud(ni));
   }
 }
 
-const blobs=[];
-function mkBlob(){
-  const hues=[[210,12],[195,9],[225,15],[240,10],[180,8]];
-  const[h,s]=hues[Math.floor(Math.random()*hues.length)];
-  return{x:Math.random()*canvas.width,y:Math.random()*canvas.height,
-    r:150+Math.random()*200,vx:(Math.random()-.5)*.1,vy:(Math.random()-.5)*.08,
-    h,s,a:.01+Math.random()*.015,scale:.8+Math.random()*.5,vs:(Math.random()-.5)*.00012};
+// ── Static point field: colours sampled from the images, fixed positions ──
+function mkDot(c){
+  // Lift the sampled colour to a visible floor: the source pixels are often near-black
+  // and would vanish against the dark background
+  let r=c[0],g=c[1],b=c[2];
+  const l=r*.299+g*.587+b*.114;
+  if(l<90){const k=90/Math.max(16,l);r=Math.min(255,r*k);g=Math.min(255,g*k);b=Math.min(255,b*k);}
+  return{x:Math.round(Math.random()*canvas.width),y:Math.round(Math.random()*canvas.height),
+    css:`rgb(${r|0},${g|0},${b|0})`,a:.25+.3*Math.random(),s:1.4+Math.random()*1.2};
 }
-for(let i=0;i<4;i++)blobs.push(mkBlob());
-
-let frame=0;
-function drawFrame(){
-  frame++;
-  ctx.globalCompositeOperation='source-over';ctx.globalAlpha=1;
-  ctx.fillStyle='rgba(7,7,9,0.055)';ctx.fillRect(0,0,canvas.width,canvas.height);
-  if(loadedImgs.length)fragments.forEach(f=>drawFrag(f));
-  ctx.globalAlpha=1;ctx.globalCompositeOperation='screen';
-  blobs.forEach(b=>{
-    b.x+=b.vx;b.y+=b.vy;b.scale+=b.vs;
-    if(b.x<-b.r||b.x>canvas.width+b.r)b.vx*=-1;
-    if(b.y<-b.r||b.y>canvas.height+b.r)b.vy*=-1;
-    if(b.scale<.5||b.scale>1.4)b.vs*=-1;
-    const r=b.r*b.scale,g=ctx.createRadialGradient(b.x,b.y,0,b.x,b.y,r);
-    g.addColorStop(0,`hsla(${b.h},${b.s}%,18%,${b.a})`);
-    g.addColorStop(.6,`hsla(${b.h},${b.s}%,8%,${b.a*.25})`);
-    g.addColorStop(1,'hsla(0,0%,0%,0)');
-    ctx.fillStyle=g;ctx.fillRect(0,0,canvas.width,canvas.height);
+function buildParticles(imgs){
+  particlePool=[];
+  const maxP=clamp(Math.round(canvas.width*canvas.height/9000),60,160);
+  const s=document.createElement('canvas');s.width=s.height=120;
+  const sc=s.getContext('2d',{willReadFrequently:true});
+  imgs.forEach(img=>{
+    try{
+      sc.clearRect(0,0,120,120);sc.drawImage(img,0,0,120,120);
+      const d=sc.getImageData(0,0,120,120).data,cand=[];
+      for(let y=0;y<120;y+=3)for(let x=0;x<120;x+=3){
+        const i=(y*120+x)*4;
+        if(d[i]*.299+d[i+1]*.587+d[i+2]*.114>32)cand.push([d[i],d[i+1],d[i+2]]);
+      }
+      shuffle(cand).slice(0,Math.ceil(maxP/imgs.length)).forEach(c=>particlePool.push(mkDot(c)));
+    }catch(e){/* tainted canvas (file://) — skip sampling for this image */}
   });
-  ctx.globalCompositeOperation='source-over';ctx.globalAlpha=1;
-  requestAnimationFrame(drawFrame);
 }
-initImages().then(()=>drawFrame());
+
+function drawFrame(dc){
+  dc.clearRect(0,0,canvas.width,canvas.height);
+  if(loadedImgs.length)fragments.forEach(f=>drawFrag(f,dc));
+  dc.globalCompositeOperation='screen';
+  for(const p of particlePool){
+    dc.globalAlpha=Math.min(1,p.a*(1+dotLift*2.2));
+    dc.fillStyle=p.css;
+    dc.fillRect(p.x,p.y,p.s,p.s);
+  }
+  dc.globalAlpha=1;dc.globalCompositeOperation='source-over';
+}
+
+function render(){
+  dotTarget*=0.82;                          // scroll flare decays fast
+  dotLift+=(dotTarget-dotLift)*0.18;        // smooth brightness settle
+  drawFrame(ctx);
+  requestAnimationFrame(render);
+}
+if(!REDUCED_MOTION)initImages().then(()=>requestAnimationFrame(render));
 
 // ── Audio ──────────────────────────────────────────────────────────────
-let ac=null, masterGain=null, playing=false;
-let droneOscs=[], droneBaseFreqs=[], pitchState='neutral';
+let ac=null, masterGain=null, playing=false, audioSession=0;
+let droneOscs=[], pitchState='neutral';
 let soundBuffers=[], activePlayers=[];
 const btn=document.getElementById('snd-btn');
 
@@ -353,7 +374,6 @@ function spawnPlayer(buffer){
   revGain.connect(masterGain);      // wet path
 
   src.start(0, startOffset);
-  console.log('[Zarhana] spawned player, offset:', startOffset.toFixed(2), 'rate:', src.playbackRate.value.toFixed(3));
   return {src, gain:playerGain};
 }
 
@@ -372,8 +392,10 @@ function fadePlayerOut(p, dur){
   setTimeout(()=>{try{p.src.stop();}catch(e){}}, (dur+0.5)*1000);
 }
 
-function scheduleNext(outgoing){
+function scheduleNext(outgoing, session){
   if(!ac||!soundBuffers.length)return;
+  const s = session ?? audioSession;
+  if(s!==audioSession)return;
   const fadeDur = rnd(5,10);
   fadePlayerOut(outgoing, fadeDur);
   activePlayers = activePlayers.filter(p=>p!==outgoing);
@@ -381,43 +403,45 @@ function scheduleNext(outgoing){
   // Small gap before next starts (0–4s)
   const delay = rnd(0, 4000);
   setTimeout(()=>{
-    if(!ac||!soundBuffers.length)return;
+    if(!ac||audioSession!==s||!soundBuffers.length)return;
     const buf = soundBuffers[Math.floor(Math.random()*soundBuffers.length)];
     const p = spawnPlayer(buf);
     if(!p)return;
     activePlayers.push(p);
     fadePlayerIn(p, rnd(5,10));
-    setTimeout(()=>scheduleNext(p), rnd(25,55)*1000);
+    setTimeout(()=>scheduleNext(p, s), rnd(25,55)*1000);
   }, delay);
 }
 
-async function loadAllSounds(){
+async function loadAllSounds(session){
+  const stale = ()=>audioSession!==session;
   soundBuffers=[];
   setStatus('loading sounds…','active');
   let loaded=0;
 
   for(const path of MANIFEST.sounds){
     try{
-      console.log('[Zarhana] fetching:', path);
       const res = await fetch(path);
       if(!res.ok){ console.warn('[Zarhana] fetch failed:', path, res.status); continue; }
       const arr = await res.arrayBuffer();
       const decoded = await ac.decodeAudioData(arr);
       soundBuffers.push(decoded);
       loaded++;
+      if(stale())return loaded;
       setStatus(`sounds ${loaded}/${MANIFEST.sounds.length}`,'active');
-      console.log('[Zarhana] loaded:', path, decoded.duration.toFixed(1)+'s');
     }catch(e){
       console.error('[Zarhana] error loading', path, e);
     }
   }
 
-  if(soundBuffers.length){
-    setStatus(`${soundBuffers.length} sounds ✓`,'ok');
-    setTimeout(()=>setStatus('',''),3000);
-  } else {
-    setStatus('sounds: drone only','err');
-    setTimeout(()=>setStatus('',''),4000);
+  if(!stale()){
+    if(soundBuffers.length){
+      setStatus(`${soundBuffers.length} sounds ✓`,'ok');
+      setTimeout(()=>{if(!stale())setStatus('','');},3000);
+    } else {
+      setStatus('sounds: drone only','err');
+      setTimeout(()=>{if(!stale())setStatus('','');},4000);
+    }
   }
   return soundBuffers.length;
 }
@@ -431,7 +455,7 @@ function startDrone(){
     [98,   73.4,  147,   49  ],  // G-centre
   ];
   const set = baseSets[Math.floor(Math.random()*baseSets.length)];
-  droneOscs=[]; droneBaseFreqs=[];
+  droneOscs=[];
 
   const gains=[0.22,0.15,0.08,0.10];
   const types=['sine','sine','triangle','sine'];
@@ -446,7 +470,7 @@ function startDrone(){
     g.gain.value=gains[i];
     o.connect(fl);fl.connect(g);g.connect(masterGain);
     o.start();
-    droneOscs.push(o); droneBaseFreqs.push(f);
+    droneOscs.push(o);
   });
 
   // Filtered noise bed
@@ -470,12 +494,19 @@ function startDrone(){
 }
 
 async function startAudio(){
-  ac = new(window.AudioContext||window.webkitAudioContext)();
+  const session = ++audioSession;
+  // Kill any context left behind by a recent stop (old timers become no-ops)
+  if(ac){
+    try{await ac.close();}catch(e){}
+    ac=null; masterGain=null; activePlayers=[];
+  }
+  const Ctx = window.AudioContext||window.webkitAudioContext;
+  if(!Ctx){ setStatus('audio not supported','err'); return false; }
+  ac = new Ctx();
 
   // Critical: resume AudioContext (Chrome often starts suspended)
   if(ac.state==='suspended'){
     await ac.resume();
-    console.log('[Zarhana] AudioContext resumed');
   }
 
   masterGain = ac.createGain();
@@ -485,9 +516,13 @@ async function startAudio(){
   const globalRev = mkReverb(ac,2.5,1.8);
   const globalRevGain = ac.createGain(); globalRevGain.gain.value=0.25;
   const dryOut = ac.createGain(); dryOut.gain.value=0.85;
+  // Soft-knee limiter on the output bus: tames stray transients that read as clicks
+  const comp=ac.createDynamicsCompressor();
+  comp.threshold.value=-12;comp.knee.value=8;comp.ratio.value=3;
+  comp.attack.value=.004;comp.release.value=.25;
 
-  masterGain.connect(dryOut); dryOut.connect(ac.destination);
-  masterGain.connect(globalRev); globalRev.connect(globalRevGain); globalRevGain.connect(ac.destination);
+  masterGain.connect(dryOut); dryOut.connect(comp); comp.connect(ac.destination);
+  masterGain.connect(globalRev); globalRev.connect(globalRevGain); globalRevGain.connect(comp);
 
   // Fade master in
   masterGain.gain.linearRampToValueAtTime(0.75, ac.currentTime+5);
@@ -497,31 +532,35 @@ async function startAudio(){
   startDrone();
 
   // Load and launch sound file loops
-  const n = await loadAllSounds();
+  const n = await loadAllSounds(session);
   if(n>0 && soundBuffers.length){
     const bufs = shuffle([...soundBuffers]);
     // Launch 2 players staggered
     bufs.slice(0,2).forEach((buf,i)=>{
       setTimeout(()=>{
-        if(!ac)return;
+        if(!ac||audioSession!==session)return;
         const p = spawnPlayer(buf);
         if(!p)return;
         activePlayers.push(p);
         fadePlayerIn(p, rnd(6,10));
-        setTimeout(()=>scheduleNext(p), rnd(25,50)*1000);
+        setTimeout(()=>scheduleNext(p, session), rnd(25,50)*1000);
       }, i * rnd(2000,6000));
     });
   }
+  return true;
 }
 
 function stopAudio(){
   if(!ac)return;
+  const s = audioSession;
   masterGain.gain.cancelScheduledValues(ac.currentTime);
   masterGain.gain.linearRampToValueAtTime(0, ac.currentTime+3);
   setTimeout(()=>{
+    // Do not tear down a context if a new session has already started
+    if(audioSession!==s)return;
     try{ac.close();}catch(e){}
     ac=null; masterGain=null;
-    droneOscs=[]; droneBaseFreqs=[];
+    droneOscs=[];
     activePlayers=[]; soundBuffers=[];
   },3500);
 }
@@ -552,24 +591,31 @@ btn.addEventListener('click',async()=>{
   if(!playing){
     btn.disabled=true;
     setStatus('starting…','active');
-    await startAudio();
+    const ok = await startAudio();
     btn.disabled=false;
-    btn.textContent='◉ sound';
+    if(!ok)return;
+    btn.textContent='◉ texture';
     btn.classList.add('on');
+    btn.setAttribute('aria-pressed','true');
+    playing=true;
   }else{
     stopAudio();
-    btn.textContent='○ sound';
+    btn.textContent='○ texture';
     btn.classList.remove('on');
+    btn.setAttribute('aria-pressed','false');
     setStatus('','');
+    playing=false;
   }
-  playing=!playing;
 });
 
+// ── Scroll: VHS RGB-split + audio pitch ──────────────────────────────
 let lastScrollY=window.scrollY;
 window.addEventListener('scroll',()=>{
-  if(!playing||!ac)return;
-  const cur=window.scrollY,dir=cur>lastScrollY?'down':'up';
+  const cur=window.scrollY,dy=cur-lastScrollY;
   lastScrollY=cur;
+  if(Math.abs(dy)>2)dotTarget=1;
+  if(!playing||!ac)return;
+  const dir=dy>0?'down':'up';
   if(dir==='down'&&pitchState!=='down'){pitchState='down';setPitch(0.9);}
   else if(dir==='up'&&pitchState!=='up'){pitchState='up';setPitch(1.1);}
 },{passive:true});
